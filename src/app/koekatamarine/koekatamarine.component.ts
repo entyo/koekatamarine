@@ -38,9 +38,6 @@ export class KoekatamarineComponent {
 
     let controls = new OrbitControls(this.camera); // Add orbit controll function
 
-    let axis = new THREE.AxisHelper(10)
-    this.scene.add(axis)
-
     let light = new THREE.DirectionalLight(0xffffff, 1.0)
     light.position.set(100, 100, 100)
     this.scene.add(light)
