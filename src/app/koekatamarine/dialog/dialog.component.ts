@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-dialog',
@@ -6,19 +6,16 @@ import { Component, EventEmitter, Output } from '@angular/core';
   styleUrls: ['./dialog.component.css']
 })
 export class DialogComponent {
-  recording = false; 
-  micClass = ''; 
+  @Input() recording = false; 
   @Output() recordStart = new EventEmitter();
   @Output() recordPause = new EventEmitter();
 
   onMicClick () { 
     this.recording = !this.recording; 
     if (this.recording) { 
-      this.micClass = 'recording';
       this.recordStart.emit();
     } 
     else { 
-      this.micClass = '';
       this.recordPause.emit();
     } 
   }

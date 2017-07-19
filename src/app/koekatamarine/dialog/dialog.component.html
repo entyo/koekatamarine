@@ -7,6 +7,6 @@
     </a>
   </p>
   <div class="mic-container">
-    <i class="fa fa-microphone fa-fw fa-2x" (click)="onMicClick()" [ngClass]="micClass"></i>
+    <i class="fa fa-microphone fa-fw fa-2x" (click)="onMicClick()" [ngClass]="{ 'recording': recording }"></i>
   </div>
 </div>

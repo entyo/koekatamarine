@@ -24,6 +24,7 @@ export class KoekatamarineComponent {
   renderer: THREE.WebGLRenderer;
   textObjects: THREE.Mesh[] = [];
   font = new THREE.FontLoader().parse(fontJSON);
+  recording = false;
 
   constructor(private speechRecognition: SpeechRecognitionService) {}
 
@@ -87,6 +88,7 @@ export class KoekatamarineComponent {
   }
 
   recordStart() {
+    this.recording = true;
     // Add text
     this.speechRecognition.record().subscribe(
       term =>{
@@ -108,8 +110,15 @@ export class KoekatamarineComponent {
       },
       err => {
         console.log(err);
+        this.speechRecognition.stop().then(() => {
+          this.recording = false;
+        });
       },
-      () => {} // complete時には何もしない
+      () => {
+        this.recordPause().then(() =>{
+          this.recording = false;
+        });
+      }
     );
   }
 
@@ -118,6 +127,7 @@ export class KoekatamarineComponent {
       this.speechRecognition.abort()
       .then(() => {
         console.log("paused");
+        this.recording = false;
         resolve();
       })
       .catch(e => {
