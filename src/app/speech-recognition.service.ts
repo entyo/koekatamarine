@@ -57,9 +57,24 @@ export class SpeechRecognitionService {
     });
   }
 
-  DestroySpeechObject() {
-    if (this.speechRecognition)
+  abort(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if (!this.speechRecognition) {
+        reject();
+      }
+      this.speechRecognition.abort();
+      resolve();
+    });
+  }
+
+  stop(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if (!this.speechRecognition) {
+        reject();
+      }
       this.speechRecognition.stop();
+      resolve();
+    });
   }
 
 }

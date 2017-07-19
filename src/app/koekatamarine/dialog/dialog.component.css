@@ -1,0 +1,58 @@
+.container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 13;
+	margin: 0 auto;
+  width: 50%;
+  color: whitesmoke;
+	text-align: center;
+}
+
+.fa-microphone {
+	color: gainsboro;
+	cursor: pointer;
+	transition: 0.8s;
+}
+
+.fa-microphone:hover {
+	color: crimson;	
+}
+
+.recording {
+	animation-name: gb-crimson-gb;
+	animation-duration: 2s;
+	animation-timing-function: ease;
+	animation-iteration-count: infinite;
+}
+
+@keyframes gb-crimson-gb {
+	0% {
+		color: gainsboro;
+	}
+
+	50% {
+		color: crimson;
+	}
+
+	100% {
+		color: gainsboro;
+	}
+}
+
+.mic-container {
+	width: 48px;
+	height: 48px;
+	margin: 0 auto;
+}
+
+p a {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+p a:link, p a:visited {
+  color: white;
+}

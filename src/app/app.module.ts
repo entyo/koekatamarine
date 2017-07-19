@@ -4,21 +4,23 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import { FrontComponent } from './front/front.component';
-import { BackComponent } from './back/back.component';
+
+import { SpeechRecognitionService } from "./speech-recognition.service";
+import { KoekatamarineComponent } from './koekatamarine/koekatamarine.component';
+import { DialogComponent } from './koekatamarine/dialog/dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    FrontComponent,
-    BackComponent
+    KoekatamarineComponent,
+    DialogComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule
   ],
-  providers: [],
+  providers: [SpeechRecognitionService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

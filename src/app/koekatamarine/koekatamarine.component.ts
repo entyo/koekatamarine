@@ -1,5 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import * as THREE from 'three';
+import { SpeechRecognitionService } from '../speech-recognition.service';
+
 const OrbitControls = require('three-orbit-controls')(THREE)
 const fontJSON = require('../../assets/fonts/rounded-mgen-1c-medium-regular.json');
 
@@ -9,19 +11,21 @@ interface IWindow extends Window {
 }
 
 @Component({
-  selector: 'app-back',
-  templateUrl: './back.component.html',
-  styleUrls: ['./back.component.css']
+  selector: 'app-koekatamarine',
+  templateUrl: './koekatamarine.component.html',
+  styleUrls: ['./koekatamarine.component.css']
 })
-export class BackComponent {
+export class KoekatamarineComponent {
 
   @ViewChild('rendererContainer') rendererContainer: ElementRef;
 
-  constructor() {}
   scene: THREE.Scene;
   camera: THREE.Camera;
   renderer: THREE.WebGLRenderer;
   textObjects: THREE.Mesh[] = [];
+  font = new THREE.FontLoader().parse(fontJSON);
+
+  constructor(private speechRecognition: SpeechRecognitionService) {}
 
   ngAfterViewInit() {
     this.scene = new THREE.Scene();
@@ -44,47 +48,6 @@ export class BackComponent {
     let light2 = new THREE.DirectionalLight(0xffffff, 1.0)
     light2.position.set(-100, 100, -100)
     this.scene.add(light2)
-
-    let material = new THREE.MeshBasicMaterial({
-      color: 0xFFFFFF,
-      wireframe: false
-    })
-
-    // Add text
-    let font = new THREE.FontLoader().parse(fontJSON);
-    const {
-      webkitSpeechRecognition
-    }: IWindow = < IWindow > window;
-    const recognition = new webkitSpeechRecognition();
-    recognition.continuous = true;
-    recognition.lang = 'ja';
-    recognition.interimResults = true;
-    recognition.maxAlternatives = 1;
-    recognition.start();
-
-    recognition.onresult = evt => {
-      console.log(this.textObjects);
-      if (!evt.results) {
-        return;
-      }
-      const result = evt.results[evt.resultIndex];
-      if (result.isFinal && result[0].confidence > 0.2) {
-        // 取得したフォントを、TextGeometryのパラメータに渡す。
-        let textGeometry = new THREE.TextGeometry(result[0].transcript, {
-          font: font,
-          size: 10,
-          height: 5,
-          curveSegments: 12,
-          bevelEnabled: false
-        });
-        let textObject = new THREE.Mesh(textGeometry, material);
-        this.textObjects.push(textObject);
-        this.scene.add(textObject);
-      }
-    }
-    recognition.onerror = evt => {
-      console.log(evt);
-    }
 
     // Set camera position
     this.camera.position.x = 0
@@ -111,7 +74,7 @@ export class BackComponent {
 
   animate() {
    this.textObjects.forEach((txt, i) => {
-      txt.position.x -= 4;
+      txt.position.x -= 2;
       const bbox = new THREE.Box3().setFromObject(txt);
       if (txt.position.x < -(window.innerWidth / 2 + (bbox.max.x - bbox.min.x))) {
         this.removeFromScene(txt);
@@ -124,6 +87,47 @@ export class BackComponent {
     });
     requestAnimationFrame(this.animate.bind(this));
     this.render()
+  }
+
+  recordStart() {
+    // Add text
+    this.speechRecognition.record().subscribe(
+      term =>{
+        let textGeometry = new THREE.TextGeometry(term, {
+          font: this.font,
+          size: 10,
+          height: 5,
+          curveSegments: 12,
+          bevelEnabled: false
+        });
+        let material = new THREE.MeshBasicMaterial({
+          color: 0xFFFFFF,
+          wireframe: false
+        })
+        let textObject = new THREE.Mesh(textGeometry, material);
+        textObject.position.set(window.innerWidth/2, Math.random()*150, Math.random()*100);
+        this.textObjects.push(textObject);
+        this.scene.add(textObject);
+      },
+      err => {
+        console.log(err);
+      },
+      () => {} // complete時には何もしない
+    );
+  }
+
+  recordPause(): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      this.speechRecognition.abort()
+      .then(() => {
+        console.log("paused");
+        resolve();
+      })
+      .catch(e => {
+        console.log(e);
+        reject();
+      });
+    });
   }
 
 }
