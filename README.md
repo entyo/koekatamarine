@@ -1,6 +1,9 @@
 # Koekatamarine
 
-"コエカタマリン" as a web application
+![screenshot](http://i.imgur.com/TpJTNbX.png)
+
+"コエカタマリン" as a web application. [Let's play!](https://entyo.github.io/koekatamarine)
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.0.
 
 ## Development server
