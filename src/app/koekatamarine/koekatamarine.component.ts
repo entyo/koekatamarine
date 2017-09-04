@@ -94,7 +94,7 @@ export class KoekatamarineComponent {
       term =>{
         let textGeometry = new THREE.TextGeometry(term, {
           font: this.font,
-          size: 10,
+          size: 72,
           height: 5,
           curveSegments: 12,
           bevelEnabled: false
