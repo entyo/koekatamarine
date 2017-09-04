@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { SpeechRecognitionService } from '../speech-recognition.service';
 
 const OrbitControls = require('three-orbit-controls')(THREE)
-const fontJSON = require('../../assets/fonts/rounded-mgen-1c-medium-regular.json');
+const fontJSON = require('../../assets/fonts/migu_1c_regular.json');
 
 interface IWindow extends Window {
   webkitSpeechRecognition: any;
